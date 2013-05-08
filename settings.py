@@ -89,7 +89,7 @@ SECRET_KEY = 'rk*1*%hy#l53%r*0lzdz6@)^wo_#ti4)x1=$%8-s1%j1%gqyrz'
 TEMPLATE_LOADERS = (
     ('pyjade.ext.django.Loader',(
         'django.template.loaders.filesystem.Loader',
-        'django.template.loadesr.app_direcoties.Loeader',
+        'django.template.loaders.app_directories.Loader',
     )),
 )
 
