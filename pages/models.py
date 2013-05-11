@@ -2,16 +2,16 @@ from django.db import models
 
 
 class Category(models.Model):
-    categoryName = models.CharField(max_length=1000)
+    category_name = models.CharField(max_length=1000)
 
     def __unicode__(self):
-        return self.categoryName
+        return self.category_name
 
 
 class Page(models.Model):
-    pageName = models.CharField(max_length=1000)
+    page_name = models.CharField(max_length=1000)
     category = models.ForeignKey(Category)
-    descriptionText = models.TextField()
+    description_text = models.TextField()
 
     def __unicode__(self):
-        return self.pageName
+        return self.page_name
