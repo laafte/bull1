@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 
 def index(request):
-    group_list = Page.objects.filter(category__category_name='Groups')
+    group_list = Page.objects.filter(category__category_name='Groups').order_by('page_name')
     return render(request, 'pages/index.html', {'group_list': group_list})
 
 
