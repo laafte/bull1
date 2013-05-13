@@ -17,4 +17,6 @@ def contact(request):
 
 
 def group(request, group):
-    return HttpResponse('ok')
+    group_page = Page.objects.filter(slug=group)[0]
+    return render(request, 'pages/group.html', {'group_name': group_page.page_name,
+                                                'description_text': group_page.description_text})
