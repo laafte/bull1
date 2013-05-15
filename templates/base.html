@@ -100,10 +100,13 @@
 
         <div class="nav-collapse collapse">
           <ul class="nav">
-            <li class="active"><a href="{% url 'home' %}">Forside</a></li>
-            <li><a href="{% url 'info' %}">Info</a></li>
-            <li><a href="{% url 'contact' %}">Kontakt</a></li>
-            <li class="dropdown">
+          {% url 'home' as home_url %}
+            <li {% if request.path == home_url %}class="active"{% endif %}><a href="{{ home_url }}">Forside</a></li>
+          {% url 'info' as info_url %}
+            <li {% if request.path == info_url %}class="active"{% endif %}><a href="{{ info_url }}">Info</a></li>
+          {% url 'contact' as contact_url %}
+            <li {% if request.path == contact_url %}class="active"{% endif %}><a href="{{ contact_url }}">Kontakt</a></li>
+            <li class="dropdown{% if request.path|slice:":13" == "/grupperinger" %} active{% endif %}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Grupperinger <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 {% for page in group_list %}
