@@ -20,6 +20,7 @@
     html,
     body {
       height: 100%;
+        position: relative;
       /* The html and body elements cannot have any padding or margin. */
     }
 
@@ -71,6 +72,116 @@
     }
   </style>
 
+  <style type="text/css">
+/* CSS for sidenav */
+.bs-docs-sidenav {
+{#  width: 170px;#}
+{#  margin: 30px 0 0;#}
+{#  padding: 0;#}
+  background-color: #fff;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+  -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+     -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+          box-shadow: 0 1px 4px rgba(0,0,0,.065);
+}
+.bs-docs-sidenav > li > a {
+    border: 1px solid #E5E5E5;
+    /*display: block;*/
+    /*margin: 0 0 -1px;*/
+    padding: 8px 14px;
+}
+
+.bs-docs-sidenav > li:first-child > a {
+    border-radius: 6px 6px 0 0;
+}
+
+.bs-docs-sidenav > li:last-child > a {
+    border-radius: 0 0 6px 6px;
+}
+
+.bs-docs-sidenav > .active > a {
+    border: 0 none;
+    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1) inset, -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+    padding: 9px 15px;
+    position: relative;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    z-index: 2;
+}
+
+.bs-docs-sidenav .icon-chevron-right {
+    float: right;
+    margin-right: -6px;
+    margin-top: 2px;
+    opacity: 0.25;
+}
+
+.bs-docs-sidenav > li > a:hover {
+    background-color: #F5F5F5;
+}
+
+.bs-docs-sidenav a:hover .icon-chevron-right {
+    opacity: 0.5;
+}
+
+.bs-docs-sidenav .active .icon-chevron-right, .bs-docs-sidenav .active a:hover .icon-chevron-right {
+    /*background-image: url("../img/glyphicons-halflings-white.png");*/
+    opacity: 1;
+}
+
+.bs-docs-sidenav.affix {
+    width: 140px;
+    position: fixed;
+}
+
+.bs-docs-sidenav.affix-bottom {
+    position: absolute;
+    top: auto;
+    bottom: 80px;
+    width: 140px;
+}
+/* Responsive
+-------------------------------------------------- */
+
+/* Desktop large
+------------------------- */
+{#@media (min-width: 1200px) {#}
+{#  .bs-docs-sidenav {#}
+{#    width: 100px;#}
+{#  }#}
+{#  .bs-docs-sidenav > li > a {#}
+{#    width: 230px \9; /* Override the previous IE8-9 hack */#}
+{#  }#}
+{#}#}
+{#/* Tablet to desktop#}
+{#------------------------- */#}
+{#@media (min-width: 768px) and (max-width: 979px) {#}
+{#  /* Adjust sidenav width */#}
+{#  .bs-docs-sidenav {#}
+{#    width: 166px;#}
+{#    margin-top: 20px;#}
+{#  }#}
+{#  .bs-docs-sidenav.affix {#}
+{#    top: 0;#}
+{#  }#}
+{#}#}
+{##}
+{#/* Tablet#}
+{#------------------------- */#}
+{#@media (max-width: 767px) {#}
+{#  /* Sidenav */#}
+{#  .bs-docs-sidenav {#}
+{#    width: auto;#}
+{#    margin-bottom: 20px;#}
+{#  }#}
+{#  .bs-docs-sidenav.affix {#}
+{#    position: static;#}
+{#    width: auto;#}
+{#    top: 0;#}
+{#  }#}
+{#}#}
+</style>
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
       <script src="{{STATIC_URL}}js/html5shiv.js"></script>
@@ -102,15 +213,22 @@
           <ul class="nav">
           {% url 'home' as home_url %}
             <li {% if request.path == home_url %}class="active"{% endif %}><a href="{{ home_url }}">Forside</a></li>
-          {% url 'info' as info_url %}
-            <li {% if request.path == info_url %}class="active"{% endif %}><a href="{{ info_url }}">Info</a></li>
+          <li class="dropdown{% if request.path|slice:":5" == "/info" %} active{% endif %}">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Info <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                {% for page in info_list %}
+                  {% url 'info' page.slug as page_url %}
+                  <li {% if request.path == page_url %}class="active"{% endif %}><a href="{{ page_url }}">{{ page.page_name }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
           {% url 'contact' as contact_url %}
             <li {% if request.path == contact_url %}class="active"{% endif %}><a href="{{ contact_url }}">Kontakt</a></li>
             <li class="dropdown{% if request.path|slice:":13" == "/grupperinger" %} active{% endif %}">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Grupperinger <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 {% for page in group_list %}
-                  {% url 'group' page.page_name|slugify as page_url %}
+                  {% url 'group' page.slug as page_url %}
                   <li {% if request.path == page_url %}class="active"{% endif %}><a href="{{ page_url }}">{{ page.page_name }}</a></li>
                 {% endfor %}
               </ul>
@@ -128,8 +246,9 @@
   </div>
 
   <div class="container">
-    <div class="well">
-      {% block content %}
+          <div class="well">
+      <div>
+        {% block content %}
         <!-- Main hero unit for a primary marketing message or call to action -->
         <div class="hero-unit">
           <h1>Hello, world!</h1>
@@ -165,6 +284,7 @@
 
         <hr>
       {% endblock %}
+      </div>
     </div>
   </div>
   <!-- /container -->
@@ -184,6 +304,18 @@
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+{#$('.bs-docs-sidenav').affix()#}
+{#var container       =   $('#container')#}
+{#var topPosition     =   container.position().top#}
+{#var bottomPosition  =   (container.height() + topPosition);#}
 
+{#$('.bs-docs-sidenav').affix({#}
+{#    offset: {#}
+{#        top     :   100,#}
+{#        bottom  :   130#}
+{#        }#}
+{#    });#}
+</script>
 </body>
 </html>
