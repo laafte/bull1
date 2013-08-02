@@ -3,3 +3,4 @@
 *.pyc
 devDB
 local_settings.py
+static
