@@ -9,13 +9,10 @@ def index(request):
                                                 'group_list': group_list})
 
 
-def info(request, info):
-    info_page = Page.objects.filter(slug=info)[0]
+def info(request):
     info_list = Page.objects.filter(category__exact='info')
     group_list = Page.objects.filter(category__exact='group').order_by('page_name')
-    return render(request, 'pages/info.html', {'info_name': info_page.page_name,
-                                               'description_text': info_page.description_text,
-                                               'info_list': info_list,
+    return render(request, 'pages/info.html', {'info_list': info_list,
                                                'group_list': group_list},)
 
 

@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}{{ info_name }}{% endblock %}
+{% block title %}Info{% endblock %}
 
 {% block content %}
-  <h1>{{ info_name }}</h1>
-  <p>{{ description_text|safe }}</p>
+    {% for info_page in info_list %}
+  <h1>{{ info_page.page_name }}</h1>
+  <p>{{ info_page.description_text|safe }}</p>
+    {% endfor %}
 {% endblock %}
