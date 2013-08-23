@@ -235,11 +235,18 @@
               </ul>
             </li>
           </ul>
-          <form class="navbar-form pull-right">
-            <input class="span2" type="text" placeholder="Brukernavn">
-            <input class="span2" type="password" placeholder="Passord">
-            <button type="submit" class="btn">Logg inn</button>
-          </form>
+          {% if user.is_authenticated %}
+            <a class="btn pull-right" href="{% url 'logout' %}?next={{ request.path }}">Logg ut</a>
+            <p class="nav navbar-text pull-right">Logget inn som {{ user.username }}.</p>
+          {% else %}
+            {#            <form class="navbar-form pull-right" action="{% url 'django.contrib.auth.views.login' %}">#}
+            {#                <input class="span2" type="text" placeholder="Brukernavn">#}
+            {#                <input class="span2" type="password" placeholder="Passord">#}
+            {#                <button type="submit" class="btn">Logg inn</button>#}
+            {#                <input type="hidden" name="next" value="{{ request.path }}" />#}
+            {#            </form>#}
+            <a class="btn pull-right" href="{% url 'login' %}?next={{ request.path }}">Logg inn</a>
+          {% endif %}
         </div>
         <!--/.nav-collapse -->
       </div>
@@ -249,13 +256,13 @@
   <div class="container">
     <div class="row">
       <div class="span2">
-      {% if request.path == info_url %}
-        <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="0" data-offset-bottom="50">
-          {% for i in "xxxxxxxxxx" %}
-          <li><a href="#test{{ forloop.counter0 }}">Test {{ forloop.counter0 }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+        {% if request.path == info_url %}
+          <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="0" data-offset-bottom="50">
+            {% for i in "xxxxxxxxxx" %}
+              <li><a href="#test{{ forloop.counter0 }}">Test {{ forloop.counter0 }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
       </div>
       <div class="span8">
         <div class="well">
