@@ -1,5 +1,5 @@
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bull.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "bull.settings.prod")
 
 from django.core.wsgi import get_wsgi_application
 from dj_static import Cling
