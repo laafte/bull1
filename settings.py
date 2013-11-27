@@ -4,6 +4,7 @@ from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 TEMPLATE_CONTEXT_PROCESSORS += (
     'django.core.context_processors.request',
+    'pages.context_processors.include_login_form'
 )
 
 DEBUG = True
@@ -63,7 +64,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/path/to/bull/static'
+STATIC_ROOT = '/home/johan/PycharmProjects/bull/static'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -79,6 +80,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    '/home/johan/PycharmProjects/bull/staticfiles',
 )
 
 # List of finder classes that know how to find static files in
@@ -104,6 +106,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
 )
 
 ROOT_URLCONF = 'bull.urls'
@@ -112,8 +115,8 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    "/path/to/bull/templates",
-    "/path/to/bull/pages/templates"
+    "/home/johan/PycharmProjects/bull/templates",
+    "/home/johan/PycharmProjects/bull/pages/templates"
 )
 
 INSTALLED_APPS = (

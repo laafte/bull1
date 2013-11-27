@@ -1,203 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>{% block title %}Musikerlåfte'{% endblock %}</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+<meta charset="utf-8">
+<title>{% block title %}Musikerlåfte'{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
 
-  <!-- Le styles -->
-  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
-  <style type="text/css">
-    body {
-      background-color: #9d261d;
-    }
+<!-- Le styles -->
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css" rel="stylesheet">
+<style type="text/css">
+  body {
+    background-color: #9d261d;
+  }
 
-      /* Sticky footer styles
-      -------------------------------------------------- */
+    /* Sticky footer styles
+    -------------------------------------------------- */
 
-    html,
-    body {
-      height: 100%;
-      position: relative;
-      /* The html and body elements cannot have any padding or margin. */
-    }
+  html,
+  body {
+    height: 100%;
+    position: relative;
+    /* The html and body elements cannot have any padding or margin. */
+  }
 
-      /* Wrapper for page content to push down footer */
-    #wrap {
-      min-height: 100%;
-      height: auto !important;
-      height: 100%;
-      /* Negative indent footer by it's height */
-      margin: 0 auto -60px;
-    }
+    /* Modal error message */
+  #login_error {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+  }
 
-      /* Set the fixed height of the footer here */
-    #push,
+    /* Wrapper for page content to push down footer */
+  #wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+  }
+
+    /* Set the fixed height of the footer here */
+  #push,
+  #footer {
+    height: 60px;
+  }
+
+  #footer {
+    background-color: #111113;
+  }
+
+    /* Lastly, apply responsive CSS fixes as necessary */
+  @media (max-width: 767px) {
     #footer {
-      height: 60px;
-    }
-
-    #footer {
-      background-color: #111113;
-    }
-
-      /* Lastly, apply responsive CSS fixes as necessary */
-    @media (max-width: 767px) {
-      #footer {
-        margin-left: -20px;
-        margin-right: -20px;
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-
-      #wrap > .container {
-        margin-top: -60px;
-      }
-    }
-
-    @media (max-width: 980px) {
-      #wrap > .container {
-        margin-top: -60px;
-      }
+      margin-left: -20px;
+      margin-right: -20px;
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
     #wrap > .container {
-      padding-top: 60px;
+      margin-top: -60px;
     }
+  }
 
-    .container .credit {
-      margin: 20px 0;
+  @media (max-width: 980px) {
+    #wrap > .container {
+      margin-top: -60px;
     }
-  </style>
+  }
 
-  <style type="text/css">
-      /* CSS for sidenav */
-    .bs-docs-sidenav {
-    {#  width: 170px;#} {#  margin: 30px 0 0;#} {#  padding: 0;#} background-color: #fff;
-      -webkit-border-radius: 6px;
-      -moz-border-radius: 6px;
-      border-radius: 6px;
-      -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
-      -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
-      box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
-    }
+  #wrap > .container {
+    padding-top: 60px;
+  }
 
-    .bs-docs-sidenav > li > a {
-      border: 1px solid #E5E5E5;
-      /*display: block;*/
-      /*margin: 0 0 -1px;*/
-      padding: 8px 14px;
-    }
+  .container .credit {
+    margin: 20px 0;
+  }
 
-    .bs-docs-sidenav > li:first-child > a {
-      border-radius: 6px 6px 0 0;
-    }
+    /* CSS for sidenav */
+  .bs-docs-sidenav {
+  {#  width: 170px;#} {#  margin: 30px 0 0;#} {#  padding: 0;#} background-color: #fff;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .065);
+  }
 
-    .bs-docs-sidenav > li:last-child > a {
-      border-radius: 0 0 6px 6px;
-    }
+  .bs-docs-sidenav > li > a {
+    border: 1px solid #E5E5E5;
+    /*display: block;*/
+    /*margin: 0 0 -1px;*/
+    padding: 8px 14px;
+  }
 
-    .bs-docs-sidenav > .active > a {
-      border: 0 none;
-      box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1) inset, -1px 0 0 rgba(0, 0, 0, 0.1) inset;
-      padding: 9px 15px;
-      position: relative;
-      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
-      z-index: 2;
-    }
+  .bs-docs-sidenav > li:first-child > a {
+    border-radius: 6px 6px 0 0;
+  }
 
-    .bs-docs-sidenav .icon-chevron-right {
-      float: right;
-      margin-right: -6px;
-      margin-top: 2px;
-      opacity: 0.25;
-    }
+  .bs-docs-sidenav > li:last-child > a {
+    border-radius: 0 0 6px 6px;
+  }
 
-    .bs-docs-sidenav > li > a:hover {
-      background-color: #F5F5F5;
-    }
+  .bs-docs-sidenav > .active > a {
+    border: 0 none;
+    box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1) inset, -1px 0 0 rgba(0, 0, 0, 0.1) inset;
+    padding: 9px 15px;
+    position: relative;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    z-index: 2;
+  }
 
-    .bs-docs-sidenav a:hover .icon-chevron-right {
-      opacity: 0.5;
-    }
+  .bs-docs-sidenav .icon-chevron-right {
+    float: right;
+    margin-right: -6px;
+    margin-top: 2px;
+    opacity: 0.25;
+  }
 
-    .bs-docs-sidenav .active .icon-chevron-right, .bs-docs-sidenav .active a:hover .icon-chevron-right {
-      /*background-image: url("../img/glyphicons-halflings-white.png");*/
-      opacity: 1;
-    }
+  .bs-docs-sidenav > li > a:hover {
+    background-color: #F5F5F5;
+  }
 
-    .bs-docs-sidenav.affix {
-      width: 140px;
-      position: fixed;
-    }
+  .bs-docs-sidenav a:hover .icon-chevron-right {
+    opacity: 0.5;
+  }
 
-    .bs-docs-sidenav.affix-bottom {
-      position: absolute;
-      top: auto;
-      bottom: 100px;
-      width: 140px;
-    }
+  .bs-docs-sidenav .active .icon-chevron-right, .bs-docs-sidenav .active a:hover .icon-chevron-right {
+    /*background-image: url("../img/glyphicons-halflings-white.png");*/
+    opacity: 1;
+  }
 
-      /* Responsive
-      -------------------------------------------------- */
+  .bs-docs-sidenav.affix {
+    width: 140px;
+    position: fixed;
+  }
 
-      /* Desktop large
-      ------------------------- */
-    {#@media (min-width: 1200px) {#}
-    {#  .bs-docs-sidenav {#}
-    {#    width: 100px;#}
-    {#  }#}
-    {#  .bs-docs-sidenav > li > a {#}
-    {#    width: 230px \9; /* Override the previous IE8-9 hack */#}
-    {#  }#}
-    {
-    #}#}
-    {#/* Tablet to desktop#}
-    {#------------------------- */#}
-    {#@media (min-width: 768px) and (max-width: 979px) {#}
-    {#  /* Adjust sidenav width */#}
-    {#  .bs-docs-sidenav {#}
-    {#    width: 166px;#}
-    {#    margin-top: 20px;#}
-    {#  }#}
-    {#  .bs-docs-sidenav.affix {#}
-    {#    top: 0;#}
-    {#  }#}
-    {
-    #}#}
-    {##}
-    {#/* Tablet#}
-    {#------------------------- */#}
-    {#@media (max-width: 767px) {#}
-    {#  /* Sidenav */#}
-    {#  .bs-docs-sidenav {#}
-    {#    width: auto;#}
-    {#    margin-bottom: 20px;#}
-    {#  }#}
-    {#  .bs-docs-sidenav.affix {#}
-    {#    position: static;#}
-    {#    width: auto;#}
-    {#    top: 0;#}
-    {#  }#}
-    {
-    #}#}
-  </style>
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
+  .bs-docs-sidenav.affix-bottom {
+    position: absolute;
+    top: auto;
+    bottom: 100px;
+    width: 140px;
+  }
+
+    /* Responsive
+    -------------------------------------------------- */
+
+    /* Desktop large
+    ------------------------- */
+  {#@media (min-width: 1200px) {#}
+  {#  .bs-docs-sidenav {#}
+  {#    width: 100px;#}
+  {#  }#}
+  {#  .bs-docs-sidenav > li > a {#}
+  {#    width: 230px \9; /* Override the previous IE8-9 hack */#}
+  {#  }#}
+  {
+  #}#}
+  {#/* Tablet to desktop#}
+  {#------------------------- */#}
+  {#@media (min-width: 768px) and (max-width: 979px) {#}
+  {#  /* Adjust sidenav width */#}
+  {#  .bs-docs-sidenav {#}
+  {#    width: 166px;#}
+  {#    margin-top: 20px;#}
+  {#  }#}
+  {#  .bs-docs-sidenav.affix {#}
+  {#    top: 0;#}
+  {#  }#}
+  {
+  #}#}
+  {##}
+  {#/* Tablet#}
+  {#------------------------- */#}
+  {#@media (max-width: 767px) {#}
+  {#  /* Sidenav */#}
+  {#  .bs-docs-sidenav {#}
+  {#    width: auto;#}
+  {#    margin-bottom: 20px;#}
+  {#  }#}
+  {#  .bs-docs-sidenav.affix {#}
+  {#    position: static;#}
+  {#    width: auto;#}
+  {#    top: 0;#}
+  {#  }#}
+  {
+  #}#}
+
+</style>
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
       <script src="{{STATIC_URL}}js/html5shiv.js"></script>
     <![endif]-->
 
-  <!-- Fav and touch icons -->
-  <link rel="apple-touch-icon-precomposed" sizes="144x144"
-        href="{{ STATIC_URL }}ico/apple-touch-icon-144-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" sizes="114x114"
-        href="{{ STATIC_URL }}ico/apple-touch-icon-114-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" sizes="72x72"
-        href="{{ STATIC_URL }}ico/apple-touch-icon-72-precomposed.png">
-  <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}ico/apple-touch-icon-57-precomposed.png">
-  <link rel="shortcut icon" href="{{ STATIC_URL }}ico/favicon.png">
+<!-- Fav and touch icons -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144"
+      href="{{ STATIC_URL }}ico/apple-touch-icon-144-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114"
+      href="{{ STATIC_URL }}ico/apple-touch-icon-114-precomposed.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72"
+      href="{{ STATIC_URL }}ico/apple-touch-icon-72-precomposed.png">
+<link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}ico/apple-touch-icon-57-precomposed.png">
+<link rel="icon" type="image/png" href="{{ STATIC_URL }}ico/favicon.png">
 </head>
 
 <body>
@@ -235,27 +241,35 @@
               </ul>
             </li>
           </ul>
-          <form class="navbar-form pull-right">
-            <input class="span2" type="text" placeholder="Brukernavn">
-            <input class="span2" type="password" placeholder="Passord">
+          <form class="navbar-form pull-right" method="post" action=".">
+            {% csrf_token %}
+            {{ login_form.username }}
+            {{ login_form.password }}
             <button type="submit" class="btn">Logg inn</button>
+            <input type="hidden" name="next" value="{{ next }}"/>
           </form>
         </div>
         <!--/.nav-collapse -->
       </div>
     </div>
+    {% if login_form.errors %}
+      <div id="login_error" class="alert span2">
+        <a class="close" data-dismiss="alert">&times;</a>
+        Feil brukernavn eller passord!
+      </div>
+    {% endif %}
   </div>
 
   <div class="container">
     <div class="row">
       <div class="span2">
-      {% if request.path == info_url %}
-        <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="0" data-offset-bottom="50">
-          {% for i in "xxxxxxxxxx" %}
-          <li><a href="#test{{ forloop.counter0 }}">Test {{ forloop.counter0 }}</a></li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+        {% if request.path == info_url %}
+          <ul class="nav nav-list bs-docs-sidenav" data-spy="affix" data-offset-top="0" data-offset-bottom="50">
+            {% for i in "xxxxxxxxxx" %}
+              <li><a href="#test{{ forloop.counter0 }}">Test {{ forloop.counter0 }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
       </div>
       <div class="span8">
         <div class="well">
@@ -263,6 +277,8 @@
             <!-- Main hero unit for a primary marketing message or call to action -->
             <div class="hero-unit">
               <h1>Hello, world!</h1>
+
+              {{ login_form.errors }}
 
               <p>This is a template for a simple marketing or informational website. It includes a large
                 callout called the
@@ -320,8 +336,8 @@
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript" src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript">
   {#$('.bs-docs-sidenav').affix()#}
   {#var container       =   $('#container')#}
