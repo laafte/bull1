@@ -1,4 +1,4 @@
-from pages.models import Page
+from bull.pages.models import Page
 
 
 def group_list(request):

@@ -1,4 +1,4 @@
-from pages.models import Page
+from bull.pages.models import Page
 from django.shortcuts import render
 
 

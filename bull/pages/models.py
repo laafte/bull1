@@ -1,7 +1,7 @@
 from django.db import models
 from tinymce import models as tinymce_models
 from tinymce.widgets import TinyMCE
-from snippets.unique_slugify import unique_slugify
+from bull.snippets.unique_slugify import unique_slugify
 
 
 class Page(models.Model):
