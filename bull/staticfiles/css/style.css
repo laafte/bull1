@@ -1,5 +1,7 @@
 body {
-    background-color: #9d261d;
+    background: #9d261d url("../old_moon.png") repeat;
+    background-attachment:;
+    opacity: 0.4;
 }
 
 /* Sticky footer styles
