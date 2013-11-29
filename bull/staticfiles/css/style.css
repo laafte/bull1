@@ -1,8 +1,18 @@
 body {
-    background: #9d261d url("../old_moon.png") repeat;
-    background-attachment:;
-    opacity: 0.4;
+    background: #9d261d;
 }
+
+/*body:after {
+    content: "";
+    background: url("../old_moon.png") repeat;
+    opacity: 0.1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+}*/
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -41,7 +51,7 @@ body {
 }
 
 /* Lastly, apply responsive CSS fixes as necessary */
-@media (max-width: 767px) {
+/*@media (max-width: 767px) {
     #footer {
         margin-left: -20px;
         margin-right: -20px;
@@ -58,7 +68,7 @@ body {
     #wrap > .container {
         margin-top: -60px;
     }
-}
+}*/
 
 #wrap > .container {
     padding-top: 60px;
