@@ -24,5 +24,4 @@ STATICFILES_DIRS = (
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
-    #"/home/johan/PycharmProjects/bull/bull/pages/templates"
 )

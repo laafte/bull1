@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput; gunicorn bull.wsgi
+web: gunicorn bull.wsgi
