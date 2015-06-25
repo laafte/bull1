@@ -44,7 +44,7 @@ THIRD_PARTY_APPS = [
 ]
 
 BULL_APPS = [
-
+    'members'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + BULL_APPS
@@ -61,6 +61,8 @@ MIDDLEWARE_CLASSES = [
 ]
 
 ROOT_URLCONF = 'bull.urls'
+
+AUTH_USER_MODEL = 'members.Member'
 
 TEMPLATES = [
     {
