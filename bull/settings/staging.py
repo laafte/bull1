@@ -5,6 +5,8 @@ DEBUG = False
 MEDIA_URL = "/media/"
 MEDIA_ROOT = "/srv/lafteweb/media_root"
 
+ALLOWED_HOSTS = ('lafteweb.ludvigjordet.com')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
