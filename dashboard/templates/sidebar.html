@@ -1,0 +1,20 @@
+{% load dashboard_tags %}
+{% load bootstrap3 %}
+<ul class="nav nav-sidebar">
+    {% for item in menu.items.all %}
+        <li{% active_class item %}><a href="{{ item.real_url }}">
+            {% if item.icon %}
+                {% icon item.icon size='small' extra_classes='lowered'%}&nbsp;
+            {% endif %}
+            {{ item.text }}
+        </a>
+        {% if item.sub_menu %}
+        <ul class="nav nav-sidebar sub-menu">
+            {% for item in item.sub_menu.items.all %}
+                <li{% active_class item %}><a href="{{ item.real_url }}">{{ item.text }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        </li>
+    {% endfor %}
+</ul>

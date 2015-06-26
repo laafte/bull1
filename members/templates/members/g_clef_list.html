@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load thumbs %}
+{% block content %}
+<h1>Potensielle panger</h1>
+<ul>
+    {% for member in member_list %}
+        <li>{{ member.get_full_name }} (mer enn {{ member.semesters }} semestre)</li>
+    {% endfor %}
+</ul>
+{% endblock %}

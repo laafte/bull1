@@ -57,7 +57,7 @@ class MemberAdmin(UserAdmin):
     list_filter = []
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personlig info', {'fields': ('first_name', 'last_name', 'birth_date')}),
+        ('Personlig info', {'fields': ('first_name', 'last_name', 'birth_date', 'profile_photo', 'is_pang')}),
         ('Kontaktinfo', {'fields': ('postal_code', 'city', 'address', 'phone', 'email')}),
         ('Tilganger', {'fields': ('is_active', 'is_admin')}),
     )
