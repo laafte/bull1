@@ -5,7 +5,7 @@ DEBUG = False
 MEDIA_URL = "/media/"
 MEDIA_ROOT = "/srv/lafteweb/media_root"
 
-ALLOWED_HOSTS = ('lafteweb.ludvigjordet.com')
+ALLOWED_HOSTS = ('lafteweb.ludvigjordet.com',)
 
 DATABASES = {
     'default': {
