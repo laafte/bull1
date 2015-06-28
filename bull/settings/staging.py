@@ -3,7 +3,10 @@ from bull.settings.base import *
 DEBUG = False
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = "/srv/lafteweb/media_root"
+MEDIA_ROOT = "/srv/lafteweb/media"
+
+STATIC_URL = "/static/"
+STATIC_ROOT = "/srv/lafteweb/static"
 
 ALLOWED_HOSTS = ('lafteweb.ludvigjordet.com',)
 
