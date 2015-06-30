@@ -126,6 +126,8 @@ class Member(AbstractBaseUser):
                 start = l.to_date
             if start < now:
                 periods.append((start, min((m.to_date or now), now)))
+        if len(periods) < 2:
+            return periods
         merged = []
         saved = list(periods[0])
         for st, en in periods:

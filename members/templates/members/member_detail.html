@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load thumbs %}
+{% load timedelta %}
+{% block headertext %}Profil for {{ member.get_full_name }}{% endblock %}
 {% block content %}
-<h1>Profil for {{ member.get_full_name }}</h1>
     <img class="pp" src="{% thumb member 200 %}">
     <img class="pp" src="{% thumb member 80 %}">
     <img class="pp" src="{% thumb member 46 %}">
     <br>
-    <p>Vært medlem i {{ member.get_total_membership_time }}</p>
+    <p>Vært medlem i {{ member.get_total_membership_time|time_delta }}</p>
 {% endblock %}

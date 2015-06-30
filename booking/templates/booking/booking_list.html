@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block headertext %}
+Øvingsspeilet
+{% endblock %}
+
+{% block content %}
+    {% for booking in booking_list %}
+        <p>{{ booking.purpose }}, {{ booking.from_time }} - {{ booking.to_time }}</p>
+    {% endfor %}
+{% endblock %}

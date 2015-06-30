@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load dashboard_tags %}
+
+{% block extra_head %}
+    {{ form.media }}
+{% endblock %}
+
+{% block headertext %}
+    Legg inn ny booking
+{% endblock %}
+
+{% block content %}
+    <form method="post" class="form narrow-form">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-6">
+                {% bootstrap_field form.from_time %}
+            </div>
+            <div class="col-sm-6">
+                {% bootstrap_field form.to_time %}
+            </div>
+        </div>
+        {% bootstrap_field form.purpose %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">
+                Lagre
+            </button>
+      {% endbuttons %}
+    </form>
+{% endblock %}

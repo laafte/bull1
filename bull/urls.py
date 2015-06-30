@@ -19,9 +19,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from bull.views import Home
 from members import urls as member_urls
+from booking import urls as booking_urls
 
 urlpatterns = [
     url(r'^$', Home.as_view(), name="home"),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^', include(member_urls, namespace='members')),
+    url(r'^ovingsspeil/', include(booking_urls, namespace='booking')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -40,12 +40,15 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'stronghold',
     'bootstrap3',
+    'bootstrap3_datetime',
 ]
 
 BULL_APPS = [
     'members',
     'events',
+    'booking',
     'dashboard',
 ]
 
@@ -64,6 +67,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'stronghold.middleware.LoginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'bull.urls'
@@ -123,3 +127,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = '/login/'

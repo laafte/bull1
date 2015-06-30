@@ -1,7 +1,6 @@
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, get_resolver
 from django.db import models
-from django.core import exceptions
+from django.utils.functional import lazy
 
 
 class Menu(models.Model):
@@ -28,6 +27,7 @@ class Menu(models.Model):
     def __str__(self):
         return self.name
 
+
 class MenuItem(models.Model):
     """
     An item in a menu.
@@ -40,7 +40,7 @@ class MenuItem(models.Model):
 
     text = models.CharField(max_length=50, verbose_name="tekst")
     icon = models.CharField(max_length=50, verbose_name="ikon",
-                            help_text="https://www.google.com/design/icons/", blank=True)
+                            help_text="<a href=\"https://www.google.com/design/icons/\">Oversikt over ikoner</a>", blank=True)
     url = models.CharField(max_length=255, verbose_name="URL")
     url_is_django = models.BooleanField(verbose_name="URL er django-url-navn", default=False,
                                         help_text="Ikke huk av denne om du ikke forstår hva det vil si.")
