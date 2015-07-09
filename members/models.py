@@ -1,9 +1,12 @@
 from datetime import datetime, timedelta, date
 import os
+import random
+import string
 from PIL import Image, ImageOps
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.core.files import File
+from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
 
@@ -15,9 +18,6 @@ class MemberManager(BaseUserManager):
     https://docs.djangoproject.com/en/1.8/topics/auth/customizing/#django.contrib.auth.models.CustomUserManager
     """
     def _create_user(self, username, password, **extra_fields):
-        """
-        Creates and saves a Member with the given username, name and password.
-        """
         if not username:
             raise ValueError("The given username must be set")
         member = self.model(username=username, **extra_fields)
@@ -39,10 +39,20 @@ class MemberManager(BaseUserManager):
 
 
 def _original_photo_location(instance, filename):
+    """
+    Generates a file location for the profile photo of a Member provided by
+    `instance`, where the original name of the file is `filename`
+    """
+    # TODO: Should use settings for photo paths
     return "profile_photos/original/{}.{}".format(instance.pk, filename.split(".")[-1])
 
 
 def _thumb_location(instance, size):
+    """
+    Generates a file location for the thumbnail of a given `size` for the
+    member given by `instance`
+    """
+    # TODO: Should use settings for path
     return "profile_photos/s_{}/{}.{}".format(size, instance.pk, "jpg")
 
 
@@ -53,6 +63,12 @@ class Member(AbstractBaseUser):
     logging in. See
     https://docs.djangoproject.com/en/1.8/topics/auth/customizing/#specifying-a-custom-user-model
     for more information on using this as the User-model.
+
+    FUTURE WORK
+    There is a lot of Låfte-specific stuff in the members-app, which should
+    probably be separated out at some point. Things like is_ensemble in
+    group, is_pang in member etc. Thumbnail-system could perhaps also be its
+    own app.
     """
     class Meta:
         verbose_name = "medlem"
@@ -70,11 +86,12 @@ class Member(AbstractBaseUser):
     first_name = models.CharField(max_length=100, verbose_name="fornavn", blank=True)
     last_name = models.CharField(max_length=100, verbose_name="etternavn", blank=True)
 
-    bio = models.TextField(verbose_name="bio", blank=True)
-    profile_photo = models.ImageField(upload_to=_original_photo_location, blank=True, null=True)
+    bio = models.TextField(verbose_name="om meg", blank=True)
+    profile_photo = models.ImageField(upload_to=_original_photo_location, blank=True,
+                                      null=True, verbose_name="profilbilde")
 
-    postal_code = models.CharField(max_length=4, verbose_name="postnummer", blank=True)
     # todo: interface this with http://developer.bring.com/api/postalcodeapi.html
+    postal_code = models.CharField(max_length=4, verbose_name="postnummer", blank=True)
     city = models.CharField(max_length=50, verbose_name="sted", blank=True)
     address = models.TextField(blank=True, verbose_name="adresse")
     phone = models.CharField(max_length=40, verbose_name="telefonnummer", blank=True)
@@ -83,37 +100,52 @@ class Member(AbstractBaseUser):
 
     birth_date = models.DateField(verbose_name="fødselsdato", blank=True, null=True)
 
+    has_completed_profile = models.BooleanField(verbose_name="har fullført registrering", default=True)
+
+    # TODO: låfte-specific info in members-app, not optimal solution
     is_pang = models.BooleanField(verbose_name="er pang", default=False)
 
     def get_full_name(self):
-        return self.first_name + " " + self.last_name
+        return (self.first_name + " " + self.last_name).strip()
 
     def get_short_name(self):
         return self.first_name
 
     def __str__(self):
-        return self.username
+        return self.get_full_name() or self.get_username()
 
     def get_current_groups(self):
         """
         Gets the Groups the Member is currently a member of.
         """
-        mships = self.get_current_memberships().select_related('Group')
-        return list({m.group for m in mships})
+        memberships = self.get_current_memberships().select_related('group')
+        # TODO: This is probably not effective. Should be looked into
+        return list({m.group for m in memberships})
 
     def get_current_memberships(self):
         """
         Gets the GroupMemberships that are current (that is has begun and
         has not ended) for the Member
         """
-        GroupMembership.get_current().filter(member=self)
+        return GroupMembership.get_current().filter(member=self)
 
     def get_membership_periods(self, include_loa=True, only_ensembles=True):
+        """
+        Returns a list of (start_date, end_date)-tuples representing all
+        periods for which the member has been a member of any group (or any
+        ensemble if only_ensembles==True). That is it will merge overlapping
+        membership periods for different groups and return them as one
+        continuous period in the resulting list.
+        If include_loa is True, there will be a gap in the period if there
+        was a LoA.
+        """
+        # TODO: include_loa is a stupid name
         now = date.today()
         memberships = self.memberships.filter(
             from_date__isnull=False).filter(from_date__lt=now).order_by('from_date')
         if only_ensembles:
             memberships = memberships.filter(group__is_ensemble=True)
+        # Generates periods for all memberships, potentially split at LoAs
         periods = []
         for m in memberships:
             loas = m.loa_set.order_by('from_date') if include_loa else []
@@ -128,6 +160,7 @@ class Member(AbstractBaseUser):
                 periods.append((start, min((m.to_date or now), now)))
         if len(periods) < 2:
             return periods
+        # Merges any overlapping periods generated above
         merged = []
         saved = list(periods[0])
         for st, en in periods:
@@ -145,11 +178,13 @@ class Member(AbstractBaseUser):
     def get_total_membership_time(self, include_loa=True, only_ensembles=True):
         """
         Gets the total time this Member has been a member of some group.
-        If include_loa is True, also includes absent time
+        If include_loa is True, takes leaves of absence into consideration.
+        If only_ensembles is True, only groups which are ensembles will be
+        considered valid groups for the time total
         """
         periods = self.get_membership_periods(include_loa, only_ensembles)
         if len(periods) < 1:
-            return timedelta()
+            return timedelta(0)
         else:
             return sum([x[1] - x[0] for x in periods], timedelta())
 
@@ -181,6 +216,10 @@ class Member(AbstractBaseUser):
 
     # todo: Thumbs-code must be moved out of Member-class, preferably to a thumbs-field
     def generate_thumbs(self, sizes=settings.THUMB_SIZES):
+        """
+        Generates thumbnails from the current profile photo of the user,
+        for each of the sizes given in `sizes`
+        """
         pil_img = Image.open(self.profile_photo)
         for size in sizes:
             thumb = ImageOps.fit(pil_img, (size, size), Image.BICUBIC)
@@ -192,10 +231,29 @@ class Member(AbstractBaseUser):
 
     def save(self, *args, **kwargs):
         super(Member, self).save(*args, **kwargs)
+        # If we have changed the photo, we should generate new thumbs
+        # TODO: profile-photo-path in settings
         if self.profile_photo and self.profile_photo.name.startswith('profile_photos/original'):
             self.generate_thumbs()
             super(Member, self).save(*args, **kwargs)
 
+    def get_absolute_url(self):
+        return reverse('members:member', args=[self.pk])
+
+    # TODO: Again, Låfte mangled in with members
+    @staticmethod
+    def get_potential_pangs():
+        """
+        Gets potential pangs, by virtue of having been more than 2,5 years
+        (i.e. 6 semesters) at Låfte. Also annotates the members with total
+        semesters and total days they have been a member
+        """
+        for m in Member.objects.filter(is_pang=False, is_active=True):
+            days = m.get_total_membership_time().days
+            if days > 365*2.5:
+                m.days = days
+                m.semesters = days//(365//2)
+                yield m
 
 
 class Group(models.Model):
@@ -210,14 +268,21 @@ class Group(models.Model):
 
     name = models.CharField(max_length=60, verbose_name="navn")
     description = models.TextField(blank=True, verbose_name="beskrivelse")
+    # TODO: Låfte specific. Should be extracted
     is_ensemble = models.BooleanField(default=False, verbose_name="gruppering",
                                       help_text="Gruppen er en gruppering på Låfte")
     hidden = models.BooleanField(default=False, verbose_name="skjult")
+    members = models.ManyToManyField(Member, through='GroupMembership')
 
     def get_current_memberships(self):
+        """
+        Gets the memberships that are current, i.e. have started and not
+        ended
+        """
         return GroupMembership.get_current().filter(group=self)
 
     def get_current_members(self):
+        # todo: optimize this, probably (do db-stuff instead of set-comprehension)
         return list({m.member for m in self.get_current_memberships()})
 
     def __str__(self):
@@ -244,6 +309,9 @@ class GroupMembership(models.Model):
 
     @staticmethod
     def get_current():
+        """
+        Gets the memberships that have started AND not ended yet
+        """
         now = datetime.today()
         q = (Q(to_date__gt=now) | Q(to_date__isnull=True)) & \
             (Q(from_date__lt=now) | Q(from_date__isnull=True))

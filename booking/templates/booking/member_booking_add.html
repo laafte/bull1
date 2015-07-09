@@ -13,12 +13,14 @@
 {% block content %}
     <form method="post" class="form narrow-form">
         {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_field form.date %}
         <div class="row">
             <div class="col-sm-6">
-                {% bootstrap_field form.from_time %}
+                {% bootstrap_field form.from_t %}
             </div>
             <div class="col-sm-6">
-                {% bootstrap_field form.to_time %}
+                {% bootstrap_field form.to_t %}
             </div>
         </div>
         {% bootstrap_field form.purpose %}

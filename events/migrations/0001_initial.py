@@ -11,23 +11,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Calendar',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
-                ('name', models.CharField(verbose_name='navn', max_length=50)),
-            ],
-        ),
-        migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
-                ('color', models.CharField(verbose_name='farge', max_length=6, blank=True)),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('color', models.CharField(verbose_name='farge', blank=True, max_length=6)),
                 ('title', models.CharField(verbose_name='navn', max_length=50)),
                 ('description', models.TextField(verbose_name='beskrivelse', blank=True)),
                 ('from_time', models.DateTimeField(verbose_name='fra')),
                 ('to_time', models.DateTimeField(verbose_name='til')),
-                ('repeats', models.IntegerField(verbose_name='repeteres', blank=True, null=True, choices=[(0, 'Daglig'), (10, 'Ukentlig'), (20, 'Annenhver uke'), (30, 'Månedlig')])),
-                ('calendar', models.ForeignKey(verbose_name='kalender', to='events.Calendar')),
+                ('repeats', models.IntegerField(choices=[(0, 'Daglig'), (10, 'Ukentlig'), (20, 'Annenhver uke'), (30, 'Månedlig')], null=True, blank=True, verbose_name='repeteres')),
             ],
         ),
     ]

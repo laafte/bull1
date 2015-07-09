@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -43,6 +44,7 @@ THIRD_PARTY_APPS = [
     'stronghold',
     'bootstrap3',
     'bootstrap3_datetime',
+    'rest_framework',
 ]
 
 BULL_APPS = [
@@ -68,6 +70,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'stronghold.middleware.LoginRequiredMiddleware',
+    'members.middleware.ProfileCompletionMiddleware',
 ]
 
 ROOT_URLCONF = 'bull.urls'
@@ -119,6 +122,9 @@ USE_TZ = True
 
 THUMB_SIZES = (200, 80, 46)
 
+REGISTRATION_TOKEN_SIZE = 32
+REGISTRATION_TOKEN_TIME = timedelta(days=7)
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -131,3 +137,16 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 
 LOGIN_URL = '/login/'
+
+STRONGHOLD_PUBLIC_NAMED_URLS = (
+    'password_reset',
+    'password_reset_done',
+    'reset',
+    'reset_done',
+)
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
+}

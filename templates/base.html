@@ -29,7 +29,10 @@
         <![endif]-->
 
     {% bootstrap_javascript jquery=1%}
-
+    <script src="/static/js/react.js"></script>
+    <script src="/static/js/JSXTransformer.js"></script>
+    <script src="/static/js/moment.js"></script>
+    <script src="/static/js/locale/nb.js"></script>
     {% block extra_head %}{% endblock %}
 
 </head>
@@ -64,9 +67,12 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="{% url 'members:member' user.pk %}">Profil</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'logout' %}">Logg ut</a></li>
+                                {% if request.user.is_admin %}
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">ADMIN</li>
+                                <li><a href="{% url 'admin:index' %}"> Gå til admin</a></li>
+                                {% endif %}
                             </ul>
                         </li>
                     {% else %}

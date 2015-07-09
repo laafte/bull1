@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!-- saved from url=(0035)http://localhost:8000/ovingsspeil/# -->
+<html lang="no"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Låfteweb</title>
+
+    <!-- Bootstrap -->
+    <link href="http://localhost:8000/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="http://localhost:8000/static/style.css" rel="stylesheet">
+    <!--<link href="/static/css/bootstrap-theme.min.css" rel="stylesheet">-->
+
+    <!--Material design icons font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="./Låfteweb_files/jquery.min.js"></script><script src="./Låfteweb_files/bootstrap.min.js"></script>
+    <script src="./Låfteweb_files/react.js"></script>
+    <script src="./Låfteweb_files/JSXTransformer.js"></script>
+    <script src="./Låfteweb_files/moment.js"></script>
+    <script src="./Låfteweb_files/nb.js"></script>
+    
+
+<script>moment.locale('nb');
+
+var CalendarDay = React.createClass({displayName: "CalendarDay",
+    render: function() {
+        var bookings = this.props.bookings.map(function (booking) {
+            return(
+                React.createElement("p", null, booking.purpose)
+            );
+        });
+        return(
+            React.createElement("div", {className: "calendarDay"}, 
+                React.createElement("div", {className: "day-header"}, 
+                    this.props.name
+                ), 
+                bookings
+            )
+
+        );
+    }
+});
+
+var WeekCalendar = React.createClass({displayName: "WeekCalendar",
+    changeWeeks: function (amount) {
+        this.state.start.add(amount, 'weeks');
+        this.updateEvents();
+    },
+    nextWeek: function (e) {
+        this.changeWeeks(1)
+    },
+    prevWeek: function (e) {
+        this.changeWeeks(-1)
+    },
+    getInitialState: function () {
+        return {data: [], start: moment().isoWeekday(1)};
+    },
+    groupData: function (data) {
+        var groupedData = [[],[],[],[],[],[],[]];
+        data.forEach(function(datum) {
+            var ft = moment(datum.from_time);
+            groupedData[ft.weekday()].push(datum)
+        });
+        return groupedData;
+    },
+    updateEvents: function () {
+        $.ajax({
+            url: this.props.url + '/?week=' + this.state.start.format("GGGG[W]WW"),
+            dataType: 'json',
+            cache: true,
+            success: function (data) {
+                this.setState({data: this.groupData(data)});
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
+    componentDidMount: function () {
+        this.updateEvents();
+    },
+    render: function () {
+        var days = this.state.data.map(function (bookings, index) {
+            return (
+                React.createElement(CalendarDay, {bookings: bookings, key: index, name: moment.weekdays((index+1)%7)})
+            );
+        });
+        return (
+            React.createElement("div", {className: "panel panel-primary weekCalendar"}, 
+                React.createElement("div", {className: "panel-heading"}, 
+                    React.createElement("h3", {className: "panel-title"}, 
+                        React.createElement("a", {href: "#", className: "btn btn-primary btn-xs", onClick: this.prevWeek}, 
+                            React.createElement("span", {className: "glyphicon glyphicon-chevron-left"})
+                        ), 
+                    " Uke ", this.state.start.format("W, GGGG"), " ", 
+                        React.createElement("a", {href: "#", className: "btn btn-primary btn-xs", onClick: this.nextWeek}, 
+                            React.createElement("span", {className: "glyphicon glyphicon-chevron-right"})
+                        )
+                    )
+                ), 
+                React.createElement("div", {className: "panel-body weeks"}, 
+                    days
+                )
+            )
+        );
+    }
+});
+
+React.render(
+    React.createElement(WeekCalendar, {url: "/api/booking/bookings"}),
+    document.getElementById('calendar')
+);
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidHJhbnNmb3JtZWQuanMiLCJzb3VyY2VzIjpbInN0YXRpYy9ib29raW5nL3dlZWtjYWwuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsTUFBTSxDQUFDLE1BQU0sQ0FBQyxJQUFJLENBQUMsQ0FBQzs7QUFFcEIsSUFBSSxpQ0FBaUMsMkJBQUE7SUFDakMsTUFBTSxFQUFFLFdBQVc7UUFDZixJQUFJLFFBQVEsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDLFFBQVEsQ0FBQyxHQUFHLENBQUMsVUFBVSxPQUFPLEVBQUU7WUFDdEQ7Z0JBQ0ksb0JBQUEsR0FBRSxFQUFBLElBQUMsRUFBQyxPQUFPLENBQUMsT0FBWSxDQUFBO2NBQzFCO1NBQ0wsQ0FBQyxDQUFDO1FBQ0g7WUFDSSxvQkFBQSxLQUFJLEVBQUEsQ0FBQSxDQUFDLFNBQUEsRUFBUyxDQUFDLGFBQWMsQ0FBQSxFQUFBO2dCQUN6QixvQkFBQSxLQUFJLEVBQUEsQ0FBQSxDQUFDLFNBQUEsRUFBUyxDQUFDLFlBQWEsQ0FBQSxFQUFBO29CQUN2QixJQUFJLENBQUMsS0FBSyxDQUFDLElBQUs7Z0JBQ2YsQ0FBQSxFQUFBO2dCQUNMLFFBQVM7QUFDMUIsWUFBa0IsQ0FBQTs7VUFFUjtLQUNMO0FBQ0wsQ0FBQyxDQUFDLENBQUM7O0FBRUgsSUFBSSxrQ0FBa0MsNEJBQUE7SUFDbEMsV0FBVyxFQUFFLFVBQVUsTUFBTSxFQUFFO1FBQzNCLElBQUksQ0FBQyxLQUFLLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQyxNQUFNLEVBQUUsT0FBTyxDQUFDLENBQUM7UUFDdEMsSUFBSSxDQUFDLFlBQVksRUFBRSxDQUFDO0tBQ3ZCO0lBQ0QsUUFBUSxFQUFFLFVBQVUsQ0FBQyxFQUFFO1FBQ25CLElBQUksQ0FBQyxXQUFXLENBQUMsQ0FBQyxDQUFDO0tBQ3RCO0lBQ0QsUUFBUSxFQUFFLFVBQVUsQ0FBQyxFQUFFO1FBQ25CLElBQUksQ0FBQyxXQUFXLENBQUMsQ0FBQyxDQUFDLENBQUM7S0FDdkI7SUFDRCxlQUFlLEVBQUUsWUFBWTtRQUN6QixPQUFPLENBQUMsSUFBSSxFQUFFLEVBQUUsRUFBRSxLQUFLLEVBQUUsTUFBTSxFQUFFLENBQUMsVUFBVSxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7S0FDcEQ7SUFDRCxTQUFTLEVBQUUsVUFBVSxJQUFJLEVBQUU7UUFDdkIsSUFBSSxXQUFXLEdBQUcsQ0FBQyxFQUFFLENBQUMsRUFBRSxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUMsRUFBRSxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUMsQ0FBQztRQUN6QyxJQUFJLENBQUMsT0FBTyxDQUFDLFNBQVMsS0FBSyxFQUFFO1lBQ3pCLElBQUksRUFBRSxHQUFHLE1BQU0sQ0FBQyxLQUFLLENBQUMsU0FBUyxDQUFDLENBQUM7WUFDakMsV0FBVyxDQUFDLEVBQUUsQ0FBQyxPQUFPLEVBQUUsQ0FBQyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUM7U0FDeEMsQ0FBQyxDQUFDO1FBQ0gsT0FBTyxXQUFXLENBQUM7S0FDdEI7SUFDRCxZQUFZLEVBQUUsWUFBWTtRQUN0QixDQUFDLENBQUMsSUFBSSxDQUFDO1lBQ0gsR0FBRyxFQUFFLElBQUksQ0FBQyxLQUFLLENBQUMsR0FBRyxHQUFHLFNBQVMsR0FBRyxJQUFJLENBQUMsS0FBSyxDQUFDLEtBQUssQ0FBQyxNQUFNLENBQUMsV0FBVyxDQUFDO1lBQ3RFLFFBQVEsRUFBRSxNQUFNO1lBQ2hCLEtBQUssRUFBRSxJQUFJO1lBQ1gsT0FBTyxFQUFFLFVBQVUsSUFBSSxFQUFFO2dCQUNyQixJQUFJLENBQUMsUUFBUSxDQUFDLENBQUMsSUFBSSxFQUFFLElBQUksQ0FBQyxTQUFTLENBQUMsSUFBSSxDQUFDLENBQUMsQ0FBQyxDQUFDO2FBQy9DLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQztZQUNaLEtBQUssRUFBRSxVQUFVLEdBQUcsRUFBRSxNQUFNLEVBQUUsR0FBRyxFQUFFO2dCQUMvQixPQUFPLENBQUMsS0FBSyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsR0FBRyxFQUFFLE1BQU0sRUFBRSxHQUFHLENBQUMsUUFBUSxFQUFFLENBQUMsQ0FBQzthQUN6RCxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUM7U0FDZixDQUFDLENBQUM7S0FDTjtJQUNELGlCQUFpQixFQUFFLFlBQVk7UUFDM0IsSUFBSSxDQUFDLFlBQVksRUFBRSxDQUFDO0tBQ3ZCO0lBQ0QsTUFBTSxFQUFFLFlBQVk7UUFDaEIsSUFBSSxJQUFJLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUMsR0FBRyxDQUFDLFVBQVUsUUFBUSxFQUFFLEtBQUssRUFBRTtZQUN0RDtnQkFDSSxvQkFBQyxXQUFXLEVBQUEsQ0FBQSxDQUFDLFFBQUEsRUFBUSxDQUFFLFFBQVEsRUFBQyxDQUFDLEdBQUEsRUFBRyxDQUFFLEtBQUssRUFBQyxDQUFDLElBQUEsRUFBSSxDQUFFLE1BQU0sQ0FBQyxRQUFRLENBQUMsQ0FBQyxLQUFLLENBQUMsQ0FBQyxFQUFFLENBQUMsQ0FBRSxDQUFBLENBQUcsQ0FBQTtjQUNyRjtTQUNMLENBQUMsQ0FBQztRQUNIO1lBQ0ksb0JBQUEsS0FBSSxFQUFBLENBQUEsQ0FBQyxTQUFBLEVBQVMsQ0FBQyxrQ0FBbUMsQ0FBQSxFQUFBO2dCQUM5QyxvQkFBQSxLQUFJLEVBQUEsQ0FBQSxDQUFDLFNBQUEsRUFBUyxDQUFDLGVBQWdCLENBQUEsRUFBQTtvQkFDM0Isb0JBQUEsSUFBRyxFQUFBLENBQUEsQ0FBQyxTQUFBLEVBQVMsQ0FBQyxhQUFjLENBQUEsRUFBQTt3QkFDeEIsb0JBQUEsR0FBRSxFQUFBLENBQUEsQ0FBQyxJQUFBLEVBQUksQ0FBQyxHQUFBLEVBQUcsQ0FBQyxTQUFBLEVBQVMsQ0FBQyx3QkFBQSxFQUF3QixDQUFDLE9BQUEsRUFBTyxDQUFFLElBQUksQ0FBQyxRQUFVLENBQUEsRUFBQTs0QkFDbkUsb0JBQUEsTUFBSyxFQUFBLENBQUEsQ0FBQyxTQUFBLEVBQVMsQ0FBQyxrQ0FBbUMsQ0FBTyxDQUFBO3dCQUMxRCxDQUFBLEVBQUE7QUFBQSxvQkFBQSxPQUFBLEVBQ0csSUFBSSxDQUFDLEtBQUssQ0FBQyxLQUFLLENBQUMsTUFBTSxDQUFDLFNBQVMsQ0FBQyxFQUFDLEdBQUEsRUFBQTtBQUFBLHdCQUMxQyxvQkFBQSxHQUFFLEVBQUEsQ0FBQSxDQUFDLElBQUEsRUFBSSxDQUFDLEdBQUEsRUFBRyxDQUFDLFNBQUEsRUFBUyxDQUFDLHdCQUFBLEVBQXdCLENBQUMsT0FBQSxFQUFPLENBQUUsSUFBSSxDQUFDLFFBQVUsQ0FBQSxFQUFBOzRCQUNuRSxvQkFBQSxNQUFLLEVBQUEsQ0FBQSxDQUFDLFNBQUEsRUFBUyxDQUFDLG1DQUFvQyxDQUFPLENBQUE7d0JBQzNELENBQUE7b0JBQ0gsQ0FBQTtnQkFDSCxDQUFBLEVBQUE7Z0JBQ04sb0JBQUEsS0FBSSxFQUFBLENBQUEsQ0FBQyxTQUFBLEVBQVMsQ0FBQyxrQkFBbUIsQ0FBQSxFQUFBO29CQUM3QixJQUFLO2dCQUNKLENBQUE7WUFDSixDQUFBO1VBQ1I7S0FDTDtBQUNMLENBQUMsQ0FBQyxDQUFDOztBQUVILEtBQUssQ0FBQyxNQUFNO0lBQ1Isb0JBQUMsWUFBWSxFQUFBLENBQUEsQ0FBQyxHQUFBLEVBQUcsQ0FBQyx1QkFBdUIsQ0FBRSxDQUFBO0lBQzNDLFFBQVEsQ0FBQyxjQUFjLENBQUMsVUFBVSxDQUFDO0NBQ3RDIiwic291cmNlc0NvbnRlbnQiOlsibW9tZW50LmxvY2FsZSgnbmInKTtcblxudmFyIENhbGVuZGFyRGF5ID0gUmVhY3QuY3JlYXRlQ2xhc3Moe1xuICAgIHJlbmRlcjogZnVuY3Rpb24oKSB7XG4gICAgICAgIHZhciBib29raW5ncyA9IHRoaXMucHJvcHMuYm9va2luZ3MubWFwKGZ1bmN0aW9uIChib29raW5nKSB7XG4gICAgICAgICAgICByZXR1cm4oXG4gICAgICAgICAgICAgICAgPHA+e2Jvb2tpbmcucHVycG9zZX08L3A+XG4gICAgICAgICAgICApO1xuICAgICAgICB9KTtcbiAgICAgICAgcmV0dXJuKFxuICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJjYWxlbmRhckRheVwiPlxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiZGF5LWhlYWRlclwiPlxuICAgICAgICAgICAgICAgICAgICB7dGhpcy5wcm9wcy5uYW1lfVxuICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgIHtib29raW5nc31cbiAgICAgICAgICAgIDwvZGl2PlxuXG4gICAgICAgICk7XG4gICAgfVxufSk7XG5cbnZhciBXZWVrQ2FsZW5kYXIgPSBSZWFjdC5jcmVhdGVDbGFzcyh7XG4gICAgY2hhbmdlV2Vla3M6IGZ1bmN0aW9uIChhbW91bnQpIHtcbiAgICAgICAgdGhpcy5zdGF0ZS5zdGFydC5hZGQoYW1vdW50LCAnd2Vla3MnKTtcbiAgICAgICAgdGhpcy51cGRhdGVFdmVudHMoKTtcbiAgICB9LFxuICAgIG5leHRXZWVrOiBmdW5jdGlvbiAoZSkge1xuICAgICAgICB0aGlzLmNoYW5nZVdlZWtzKDEpXG4gICAgfSxcbiAgICBwcmV2V2VlazogZnVuY3Rpb24gKGUpIHtcbiAgICAgICAgdGhpcy5jaGFuZ2VXZWVrcygtMSlcbiAgICB9LFxuICAgIGdldEluaXRpYWxTdGF0ZTogZnVuY3Rpb24gKCkge1xuICAgICAgICByZXR1cm4ge2RhdGE6IFtdLCBzdGFydDogbW9tZW50KCkuaXNvV2Vla2RheSgxKX07XG4gICAgfSxcbiAgICBncm91cERhdGE6IGZ1bmN0aW9uIChkYXRhKSB7XG4gICAgICAgIHZhciBncm91cGVkRGF0YSA9IFtbXSxbXSxbXSxbXSxbXSxbXSxbXV07XG4gICAgICAgIGRhdGEuZm9yRWFjaChmdW5jdGlvbihkYXR1bSkge1xuICAgICAgICAgICAgdmFyIGZ0ID0gbW9tZW50KGRhdHVtLmZyb21fdGltZSk7XG4gICAgICAgICAgICBncm91cGVkRGF0YVtmdC53ZWVrZGF5KCldLnB1c2goZGF0dW0pXG4gICAgICAgIH0pO1xuICAgICAgICByZXR1cm4gZ3JvdXBlZERhdGE7XG4gICAgfSxcbiAgICB1cGRhdGVFdmVudHM6IGZ1bmN0aW9uICgpIHtcbiAgICAgICAgJC5hamF4KHtcbiAgICAgICAgICAgIHVybDogdGhpcy5wcm9wcy51cmwgKyAnLz93ZWVrPScgKyB0aGlzLnN0YXRlLnN0YXJ0LmZvcm1hdChcIkdHR0dbV11XV1wiKSxcbiAgICAgICAgICAgIGRhdGFUeXBlOiAnanNvbicsXG4gICAgICAgICAgICBjYWNoZTogdHJ1ZSxcbiAgICAgICAgICAgIHN1Y2Nlc3M6IGZ1bmN0aW9uIChkYXRhKSB7XG4gICAgICAgICAgICAgICAgdGhpcy5zZXRTdGF0ZSh7ZGF0YTogdGhpcy5ncm91cERhdGEoZGF0YSl9KTtcbiAgICAgICAgICAgIH0uYmluZCh0aGlzKSxcbiAgICAgICAgICAgIGVycm9yOiBmdW5jdGlvbiAoeGhyLCBzdGF0dXMsIGVycikge1xuICAgICAgICAgICAgICAgIGNvbnNvbGUuZXJyb3IodGhpcy5wcm9wcy51cmwsIHN0YXR1cywgZXJyLnRvU3RyaW5nKCkpO1xuICAgICAgICAgICAgfS5iaW5kKHRoaXMpXG4gICAgICAgIH0pO1xuICAgIH0sXG4gICAgY29tcG9uZW50RGlkTW91bnQ6IGZ1bmN0aW9uICgpIHtcbiAgICAgICAgdGhpcy51cGRhdGVFdmVudHMoKTtcbiAgICB9LFxuICAgIHJlbmRlcjogZnVuY3Rpb24gKCkge1xuICAgICAgICB2YXIgZGF5cyA9IHRoaXMuc3RhdGUuZGF0YS5tYXAoZnVuY3Rpb24gKGJvb2tpbmdzLCBpbmRleCkge1xuICAgICAgICAgICAgcmV0dXJuIChcbiAgICAgICAgICAgICAgICA8Q2FsZW5kYXJEYXkgYm9va2luZ3M9e2Jvb2tpbmdzfSBrZXk9e2luZGV4fSBuYW1lPXttb21lbnQud2Vla2RheXMoKGluZGV4KzEpJTcpfSAvPlxuICAgICAgICAgICAgKTtcbiAgICAgICAgfSk7XG4gICAgICAgIHJldHVybiAoXG4gICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInBhbmVsIHBhbmVsLXByaW1hcnkgd2Vla0NhbGVuZGFyXCI+XG4gICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJwYW5lbC1oZWFkaW5nXCI+XG4gICAgICAgICAgICAgICAgICAgIDxoMyBjbGFzc05hbWU9XCJwYW5lbC10aXRsZVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgPGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJidG4gYnRuLXByaW1hcnkgYnRuLXhzXCIgb25DbGljaz17dGhpcy5wcmV2V2Vla30+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiZ2x5cGhpY29uIGdseXBoaWNvbi1jaGV2cm9uLWxlZnRcIj48L3NwYW4+XG4gICAgICAgICAgICAgICAgICAgICAgICA8L2E+XG4gICAgICAgICAgICAgICAgICAgICZuYnNwO1VrZSB7dGhpcy5zdGF0ZS5zdGFydC5mb3JtYXQoXCJXLCBHR0dHXCIpfSZuYnNwO1xuICAgICAgICAgICAgICAgICAgICAgICAgPGEgaHJlZj1cIiNcIiBjbGFzc05hbWU9XCJidG4gYnRuLXByaW1hcnkgYnRuLXhzXCIgb25DbGljaz17dGhpcy5uZXh0V2Vla30+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPHNwYW4gY2xhc3NOYW1lPVwiZ2x5cGhpY29uIGdseXBoaWNvbi1jaGV2cm9uLXJpZ2h0XCI+PC9zcGFuPlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9hPlxuICAgICAgICAgICAgICAgICAgICA8L2gzPlxuICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwicGFuZWwtYm9keSB3ZWVrc1wiPlxuICAgICAgICAgICAgICAgICAgICB7ZGF5c31cbiAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICApO1xuICAgIH1cbn0pO1xuXG5SZWFjdC5yZW5kZXIoXG4gICAgPFdlZWtDYWxlbmRhciB1cmw9Jy9hcGkvYm9va2luZy9ib29raW5ncycvPixcbiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY2FsZW5kYXInKVxuKTsiXX0=</script></head>
+<body class="">
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-laafte navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://localhost:8000/">Låfteweb</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    
+                        <li class="dropdown">
+                            <a href="./Låfteweb_files/Låfteweb.html" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <img class="pp" src="./Låfteweb_files/1.jpg"> Ludvig Jordet <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="http://localhost:8000/medlemmer/1/">Profil</a></li>
+                                <li><a href="http://localhost:8000/logout/">Logg ut</a></li>
+                                
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">ADMIN</li>
+                                <li><a href="http://localhost:8000/admin/"> Gå til admin</a></li>
+                                
+                            </ul>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+
+    
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-3 col-md-2 sidebar">
+                    
+
+<ul class="nav nav-sidebar">
+    
+        <li><a href="http://localhost:8000/">
+            
+                <span class="material-icons small lowered">home</span>&nbsp;
+            
+            Oversikt
+        </a>
+        
+        </li>
+    
+        <li><a href="http://localhost:8000/medlemmer/">
+            
+                <span class="material-icons small lowered">person</span>&nbsp;
+            
+            Medlemmer
+        </a>
+        
+        <ul class="nav nav-sidebar sub-menu">
+            
+                <li><a href="http://localhost:8000/medlemmer/aktive/">Aktive</a></li>
+            
+                <li><a href="http://localhost:8000/medlemmer/panger/nye/">Panger</a></li>
+            
+                <li><a href="http://localhost:8000/medlemmer/grupper/">Grupper</a></li>
+            
+            <li class="divider"></li>
+        </ul>
+        
+        </li>
+    
+        <li class="active"><a href="http://localhost:8000/ovingsspeil/">
+            
+                <span class="material-icons small lowered">schedule</span>&nbsp;
+            
+            Øvingsspeil
+        </a>
+        
+        </li>
+    
+</ul>
+                </div>
+                <div class="col-sm-9 col-md-10 col-sm-offset-3 col-md-offset-2 main">
+                    <h1 class="page-header">
+Øvingsspeilet
+ <a href="http://localhost:8000/ovingsspeil/ny_booking/" class="btn btn-primary btn-xs"><span class="glyphicon glyphicon-plus"></span> Legg til booking</a>
+</h1>
+                    
+    <hr>
+    <div id="calendar"><div class="panel panel-primary weekCalendar" data-reactid=".0"><div class="panel-heading" data-reactid=".0.0"><h3 class="panel-title" data-reactid=".0.0.0"><a href="./Låfteweb_files/Låfteweb.html" class="btn btn-primary btn-xs" data-reactid=".0.0.0.0"><span class="glyphicon glyphicon-chevron-left" data-reactid=".0.0.0.0.0"></span></a><span data-reactid=".0.0.0.1">&nbsp;Uke </span><span data-reactid=".0.0.0.2">28, 2015</span><span data-reactid=".0.0.0.3">&nbsp;</span><a href="./Låfteweb_files/Låfteweb.html" class="btn btn-primary btn-xs" data-reactid=".0.0.0.4"><span class="glyphicon glyphicon-chevron-right" data-reactid=".0.0.0.4.0"></span></a></h3></div><div class="panel-body weeks" data-reactid=".0.1"><div class="calendarDay" data-reactid=".0.1.$0"><div class="day-header" data-reactid=".0.1.$0.0">mandag</div></div><div class="calendarDay" data-reactid=".0.1.$1"><div class="day-header" data-reactid=".0.1.$1.0">tirsdag</div></div><div class="calendarDay" data-reactid=".0.1.$2"><div class="day-header" data-reactid=".0.1.$2.0">onsdag</div><p data-reactid=".0.1.$2.1:0">Bruke låfte</p></div><div class="calendarDay" data-reactid=".0.1.$3"><div class="day-header" data-reactid=".0.1.$3.0">torsdag</div><p data-reactid=".0.1.$3.1:0">Spille trommer</p></div><div class="calendarDay" data-reactid=".0.1.$4"><div class="day-header" data-reactid=".0.1.$4.0">fredag</div><p data-reactid=".0.1.$4.1:0">Klubbaften</p></div><div class="calendarDay" data-reactid=".0.1.$5"><div class="day-header" data-reactid=".0.1.$5.0">lørdag</div></div><div class="calendarDay" data-reactid=".0.1.$6"><div class="day-header" data-reactid=".0.1.$6.0">søndag</div></div></div></div></div>
+            </div>
+        </div>
+    
+
+
+</div></body></html>

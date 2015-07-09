@@ -16,36 +16,36 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Booking',
             fields=[
-                ('event_ptr', models.OneToOneField(auto_created=True, primary_key=True, serialize=False, parent_link=True, to='events.Event')),
+                ('event_ptr', models.OneToOneField(serialize=False, to='events.Event', auto_created=True, primary_key=True, parent_link=True)),
                 ('purpose', models.TextField(verbose_name='formål', blank=True)),
             ],
             options={
-                'verbose_name': 'booking',
                 'verbose_name_plural': 'bookinger',
+                'verbose_name': 'booking',
             },
             bases=('events.event',),
         ),
         migrations.CreateModel(
             name='GlobalBooking',
             fields=[
-                ('booking_ptr', models.OneToOneField(auto_created=True, primary_key=True, serialize=False, parent_link=True, to='booking.Booking')),
+                ('booking_ptr', models.OneToOneField(serialize=False, to='booking.Booking', auto_created=True, primary_key=True, parent_link=True)),
                 ('owner_field_content', models.CharField(max_length=100, blank=True)),
             ],
             options={
-                'verbose_name': 'global booking',
                 'verbose_name_plural': 'globale bookinger',
+                'verbose_name': 'global booking',
             },
             bases=('booking.booking',),
         ),
         migrations.CreateModel(
             name='MemberBooking',
             fields=[
-                ('booking_ptr', models.OneToOneField(auto_created=True, primary_key=True, serialize=False, parent_link=True, to='booking.Booking')),
+                ('booking_ptr', models.OneToOneField(serialize=False, to='booking.Booking', auto_created=True, primary_key=True, parent_link=True)),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'verbose_name': 'medlemsbooking',
                 'verbose_name_plural': 'medlemsbookinger',
+                'verbose_name': 'medlemsbooking',
             },
             bases=('booking.booking',),
         ),

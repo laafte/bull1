@@ -1,10 +1,11 @@
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.admin import ModelAdmin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group as DjangoGroup
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.template.response import TemplateResponse
 from members.forms import BulkAddForm
@@ -23,6 +24,10 @@ class MemberAdmin(UserAdmin):
         ] + urls
 
     def bulk_add(self, request, form_url=''):
+        """
+        A view showing a form for adding users in bulk by their email-
+        addresses.
+        """
         if not self.has_add_permission(request):
             raise PermissionDenied
         if request.method == 'POST':
@@ -54,12 +59,12 @@ class MemberAdmin(UserAdmin):
         return TemplateResponse(request, self.bulk_add_template, context)
 
     filter_horizontal = []
-    list_filter = []
+    list_filter = ['has_completed_profile', 'is_active', 'is_pang']
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personlig info', {'fields': ('first_name', 'last_name', 'birth_date', 'profile_photo', 'is_pang')}),
+        ('Personlig info', {'fields': ('first_name', 'last_name', 'birth_date', 'profile_photo', 'is_pang', 'bio')}),
         ('Kontaktinfo', {'fields': ('postal_code', 'city', 'address', 'phone', 'email')}),
-        ('Tilganger', {'fields': ('is_active', 'is_admin')}),
+        ('Tilganger', {'fields': ('is_active', 'is_admin', 'has_completed_profile')}),
     )
     list_display = ('username', 'first_name', 'last_name')
 

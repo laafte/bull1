@@ -13,6 +13,7 @@
             {% for item in item.sub_menu.items.all %}
                 <li{% active_class item %}><a href="{{ item.real_url }}">{{ item.text }}</a></li>
             {% endfor %}
+            <li class="divider"></li>
         </ul>
         {% endif %}
         </li>

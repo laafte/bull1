@@ -13,31 +13,31 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Menu',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
                 ('name', models.CharField(verbose_name='navn', max_length=50)),
-                ('slot', models.IntegerField(verbose_name='plassering', blank=True, null=True, choices=[(1, 'Sidebar'), (2, 'Topp')], unique=True)),
+                ('slot', models.IntegerField(choices=[(1, 'Sidebar'), (2, 'Topp')], null=True, blank=True, verbose_name='plassering', unique=True)),
             ],
             options={
-                'verbose_name': 'Meny',
                 'verbose_name_plural': 'Menyer',
+                'verbose_name': 'Meny',
             },
         ),
         migrations.CreateModel(
             name='MenuItem',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
                 ('text', models.CharField(verbose_name='tekst', max_length=50)),
-                ('icon', models.CharField(verbose_name='ikon', max_length=50, blank=True, help_text='https://www.google.com/design/icons/')),
+                ('icon', models.CharField(max_length=50, verbose_name='ikon', blank=True, help_text='<a href="https://www.google.com/design/icons/">Oversikt over ikoner</a>')),
                 ('url', models.CharField(verbose_name='URL', max_length=255)),
-                ('url_is_django', models.BooleanField(verbose_name='URL er django-url-navn', help_text='Ikke huk av denne om du ikke forstår hva det vil si.', default=False)),
+                ('url_is_django', models.BooleanField(default=False, verbose_name='URL er django-url-navn', help_text='Ikke huk av denne om du ikke forstår hva det vil si.')),
                 ('position', models.IntegerField(verbose_name='posisjon')),
-                ('parent_menu', models.ForeignKey(to='dashboard.Menu', verbose_name='i meny', related_name='items')),
-                ('sub_menu', models.OneToOneField(to='dashboard.Menu', blank=True, verbose_name='inneholder meny', related_name='parent_item', null=True)),
+                ('parent_menu', models.ForeignKey(verbose_name='i meny', related_name='items', to='dashboard.Menu')),
+                ('sub_menu', models.OneToOneField(verbose_name='inneholder meny', blank=True, to='dashboard.Menu', null=True, related_name='parent_item')),
             ],
             options={
+                'verbose_name_plural': 'Menyelementer',
                 'verbose_name': 'Menyelement',
                 'ordering': ['parent_menu', 'position'],
-                'verbose_name_plural': 'Menyelementer',
             },
         ),
         migrations.AlterUniqueTogether(

@@ -1,10 +1,49 @@
 {% extends 'base.html' %}
 {% load thumbs %}
+{% load bootstrap3 %}
 {% block headertext %}Potensielle panger{% endblock %}
 {% block content %}
-<ul>
-    {% for member in member_list %}
-        <li>{{ member.get_full_name }} (mer enn {{ member.semesters }} semestre)</li>
-    {% endfor %}
-</ul>
+    {% if form.visible_fields %}
+        <p>Kryss av for de som har fått G-nøkkel, og lagre listen for å lagre dem som panger i systemet
+        </p>
+        <p><a class="btn btn-default btn-sm" href="{% url 'members:pangs_pdf' %}">Skriv ut PDF</a></p>
+        <form method="POST">
+        {% csrf_token %}
+        <table class="table table-condensed table-bordered" id="pang_table">
+            <thead>
+                <tr>
+                    <th width="30px"><input type="checkbox" id="check_all" onclick="select_all(this)"></th>
+                    <th>Navn</th>
+                    <th>Vært medlem i</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            {% for field in form.visible_fields %}
+                {% with field.field.member as m %}
+                    <tr>
+                        <td>{{ field }}</td>
+                        <td>{{ m.get_full_name }}</td>
+                        <td>{{ m.semesters }} semestre ({{ m.days }} dager)</td>
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+            </tbody>
+        </table>
+        {% buttons %}
+        <button class="btn btn-primary" type="submit">Lagre</button>
+        {% endbuttons %}
+        </form>
+
+        <script>
+        function select_all(cb){
+            var list = document.querySelectorAll("#pang_table input[type='checkbox']");
+            for(var i = 0; i < list.length; ++i){
+                list[i].checked = cb.checked;
+            }
+        }
+        </script>
+    {% else %}
+        <p class="">Ingen nye medlemmer som kvalifiserer til G-nøkkel</p>
+    {% endif %}
 {% endblock %}

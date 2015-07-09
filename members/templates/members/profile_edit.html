@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block headertext %}Rediger profil{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        {% bootstrap_field form.first_name %}
+    </div>
+    <div class="col-sm-6 col-md-4">
+        {% bootstrap_field form.last_name %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        {% bootstrap_field form.email %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        {% bootstrap_field form.phone %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        {% bootstrap_field form.bio %}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        <p>Profilbilde</p>
+        <div class="well">
+            {% bootstrap_field form.profile_photo layout='inline' %}
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        <p>Adresse</p>
+        <div class="well">
+            {% bootstrap_field form.address %}
+            <div class="row">
+                <div class="col-sm-4">
+                    {% bootstrap_field form.postal_code %}
+                </div>
+                <div class="col-sm-8">
+                    {% bootstrap_field form.city %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% buttons %}
+<button type="submit" class="btn btn-primary">Lagre</button>
+{% endbuttons %}
+</form>
+
+    <script type="text/javascript">
+        var pnr = document.getElementById('id_postal_code');
+        var city = document.getElementById('id_city');
+        city.readOnly = true;
+        city.style.textTransform = "capitalize";
+        pnr.onkeyup = updateCity;
+        pnr.onchange = updateCity;
+
+        updateCity();
+
+        function updateCity(){
+            // Uses the bring api to lookup postal codes and update the city-value
+            if(pnr.value.length == 4){
+                // TODO: Update client url here
+                var bringResponse = $.getJSON("https://api.bring.com/shippingguide/api/" +
+                "postalCode.json?clientUrl=lafteweb.ludvigjordet.com&country=no&pnr="+pnr.value, function(data){
+                    if(data.valid)
+                        city.value = data.result.toLowerCase();
+                    else
+                        city.value = ""
+                })
+            } else {
+                city.value = ""
+            }
+        }
+    </script>
+{% endblock %}

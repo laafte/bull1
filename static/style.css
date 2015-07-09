@@ -21,8 +21,9 @@ body.red{
         padding: 20px;
         overflow-x: hidden;
         overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-        background-color: #A03033;
-        border-right: 1px solid #eee;
+        background-color: #a03033;
+        /*border-right: 1px solid #202020;*/
+        box-shadow: 0 0 3px rgba(0,0,0,0.3);
     }
 }
 
@@ -35,14 +36,16 @@ body.red{
 
 .nav-sidebar.sub-menu{
     margin: 0;
-    background-color: #ffffff;
+    background-color: #fcfcfc;
     height: 0;
     overflow: hidden;
-    border-right: 3px solid #a03033;
+    /*border-right: 3px solid #a03033;*/
 }
 
 .nav-sidebar > .active > .sub-menu{
     height: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .nav-sidebar > li > a {
@@ -70,21 +73,84 @@ body.red{
     padding: 20px;
 }
 
+.profile-header {
+    padding: 20px;
+    margin-bottom: 20px;
+    height: 100px;
+}
+
+.home-top h1{
+    color: #a03033;
+}
+.profile-header h1,
+.main .page-header{
+    color: rgba(0, 0, 0, 0.87)
+}
+
+.profile-header .pp{
+    float: left;
+    margin-right: 20px;
+}
+
+.profile-content {
+    margin-left: 220px;
+}
+
+.profile-content h2{
+    font-size: 18px;
+    font-weight: bold;
+    border-bottom: 0px solid black;
+    padding-bottom: 0;
+}
+
+@media (max-width: 767px) {
+    .profile-header {
+        text-align: center;
+        height: 330px;
+    }
+}
+
 @media (min-width: 768px) {
-    .main {
-        padding-right: 40px;
-        padding-left: 40px;
+    .profile-content {
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 767px) {
+    .profile-header .pp {
+        float: none;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .profile-content {
+        margin-left: 0;
     }
 }
 
 .main .page-header {
-    margin-top: 0;
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding: 20px 20px 0 20px;
+    border: none
+}
+
+.main .page-header,
+.jumbotron.home-top,
+.profile-header{
+    background: none;
+    color: rgba(0,0,0,0.87);
 }
 
 /* navbar */
 .navbar-laafte {
     background-color: #202020;
-    border-color: #404040;
+    border-color: #202020;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
 }
 
 /* title */
@@ -203,4 +269,112 @@ img.pp{
     margin-top: 20px;
     border-radius: 3px;
     box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.main > .jumbotron, .profile-header {
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-top: -20px;
+    border-radius: 0;
+    background-color: #dddddd;
+    box-shadow: 0px -5px 5px -5px rgba(0,0,0,0.3) inset;
+}
+
+.panel-body.weeks{
+    padding: 0;
+    overflow: hidden;
+    min-height: 200px;
+}
+
+.calendarDay{
+    box-sizing: border-box;
+    width: 14.285714285714285714285714285714285714285714285714285%;
+    float: left;
+}
+
+.calendarDay .day-header{
+    border-right: 1px solid #404040;
+    height: 4000px;
+    margin: 0 0 -3975px;
+}
+
+.calendarDay:last-child .day-header{
+    border-right: none;
+}
+
+.calendarDay .day-header h3{
+    border-bottom: 1px solid #404040;
+    background-color: #202020;
+    text-align: center;
+    padding: 5px;
+    margin: 0;
+    font-size: 14px;
+    text-transform: capitalize;
+    color: rgba(255,255,255,0.87)
+}
+
+.calendarDay .day-body{
+    padding: 5px;
+}
+
+.booking{
+    margin-bottom: 5px;
+    margin-top: 5px;
+    padding-left: 0px;
+    border-left: 0px solid #a03033;
+}
+
+.booking:first-child{
+    margin-top: 0;
+}
+
+.booking:last-child {
+    margin-bottom: 0;
+}
+
+.booking h4{
+    padding: 0;
+    margin: 0;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.booking p{
+    font-size: 12px;
+    color: rgba(0,0,0,0.87);
+    margin: 0 0 0 5px;
+}
+
+.booking .owner{
+    font-size: 10px;
+}
+
+.booking .owner a{
+    text-decoration: underline;
+}
+
+.booking.globalBooking{
+    border-color: #cccccc;
+}
+
+.booking.globalBooking h4, .booking.globalBooking p{
+    color: rgba(0,0,0,0.5);
+    font-style: italic;
+}
+
+@media (max-width: 991px){
+    .calendarDay .day-header{
+        border: none;
+        height: auto;
+        margin: 0;
+    }
+
+    .calendarDay .day-header h3{
+        text-align: left;
+    }
+
+    .calendarDay{
+        width: 100%;
+        min-height: 50px;
+    }
 }
